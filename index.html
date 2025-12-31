@@ -178,16 +178,6 @@
             z-index: 3;
         }
 
-        /* White text state - with shadow for visibility on light backgrounds */
-        .is-white {
-            color: #fff !important;
-            text-shadow: 0 0 10px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.9);
-        }
-
-        .is-white svg {
-            fill: #fff !important;
-            filter: drop-shadow(0 0 6px rgba(0,0,0,0.8)) drop-shadow(0 2px 3px rgba(0,0,0,0.9));
-        }
     </style>
 </head>
 <body>
@@ -279,47 +269,6 @@
             mouseY = e.clientY;
         });
 
-        // Hoverable elements detection
-        const hoverables = document.querySelectorAll('[data-hoverable]');
-
-        function checkHoverableIntersection(blobX, blobY, blobRadius) {
-            const elementsToCheck = [...hoverables, ...trails.map(t => t.element).filter(Boolean)];
-            
-            hoverables.forEach(el => {
-                const rect = el.getBoundingClientRect();
-                const elCenterX = rect.left + rect.width / 2;
-                const elCenterY = rect.top + rect.height / 2;
-                
-                // Check main blob
-                const distToMain = Math.sqrt(
-                    Math.pow(blobX - elCenterX, 2) + 
-                    Math.pow(blobY - elCenterY, 2)
-                );
-                
-                // Check trail blobs
-                let isInTrail = false;
-                for (const trail of trails) {
-                    if (trail.opacity > 0.1) {
-                        const distToTrail = Math.sqrt(
-                            Math.pow(trail.x - elCenterX, 2) + 
-                            Math.pow(trail.y - elCenterY, 2)
-                        );
-                        if (distToTrail < trail.size / 2 + Math.max(rect.width, rect.height) / 2) {
-                            isInTrail = true;
-                            break;
-                        }
-                    }
-                }
-                
-                const isOverlapping = distToMain < blobRadius + Math.max(rect.width, rect.height) / 2;
-                
-                if (isOverlapping || isInTrail) {
-                    el.classList.add('is-white');
-                } else {
-                    el.classList.remove('is-white');
-                }
-            });
-        }
 
         // Trail management
         function addTrail(x, y, size, opacity) {
@@ -422,9 +371,6 @@
                 ctx.globalCompositeOperation = 'source-in';
                 ctx.drawImage(revealImage, drawX, drawY, drawWidth, drawHeight);
             }
-            
-            // Check hoverable intersections
-            checkHoverableIntersection(blobX, blobY, CONFIG.blobSize / 2);
             
             requestAnimationFrame(animate);
         }
