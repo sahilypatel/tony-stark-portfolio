@@ -178,13 +178,15 @@
             z-index: 3;
         }
 
-        /* White text state */
+        /* White text state - with shadow for visibility on light backgrounds */
         .is-white {
             color: #fff !important;
+            text-shadow: 0 0 10px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.9);
         }
 
         .is-white svg {
             fill: #fff !important;
+            filter: drop-shadow(0 0 6px rgba(0,0,0,0.8)) drop-shadow(0 2px 3px rgba(0,0,0,0.9));
         }
     </style>
 </head>
